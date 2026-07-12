@@ -1,0 +1,160 @@
+{
+  "subPackages": [
+    {
+      "root": "pages/subpack/"
+    }
+  ],
+  "entryPagePath": "pages/home/home.html",
+  "pages": [
+    "pages/home/home",
+    "pages/home/search",
+    "pages/complate/complate",
+    "pages/my/my",
+    "uni_modules/uni-id-pages/pages/login/login-withoutpwd",
+    "uni_modules/uni-id-pages/pages/login/login-withpwd",
+    "uni_modules/uni-id-pages/pages/register/register",
+    "uni_modules/uni-id-pages/pages/userinfo/change_pwd/change_pwd",
+    "uni_modules/uni-id-pages/pages/common/PrivacyPolicy/PrivacyPolicy",
+    "uni_modules/uni-id-pages/pages/common/UserAgreement/UserAgreement",
+    "uni_modules/uni-id-pages/pages/userinfo/deactivate/deactivate",
+    "pages/subpack/explanation/explanation",
+    "pages/subpack/analysis/analysis",
+    "pages/subpack/record/record",
+    "pages/subpack/list/list",
+    "pages/subpack/usermsg/usermsg",
+    "pages/subpack/pay/pay"
+  ],
+  "page": {
+    "pages/home/home.html": {
+      "window": {
+        "navigationBarTitleText": "首页"
+      }
+    },
+    "pages/home/search.html": {
+      "window": {
+        "navigationBarTitleText": "搜索"
+      }
+    },
+    "pages/complate/complate.html": {
+      "window": {
+        "navigationBarTitleText": "结算"
+      }
+    },
+    "pages/my/my.html": {
+      "window": {
+        "navigationBarTitleText": "我的"
+      }
+    },
+    "uni_modules/uni-id-pages/pages/login/login-withoutpwd.html": {
+      "window": {
+        "navigationBarTitleText": "微信登录"
+      }
+    },
+    "uni_modules/uni-id-pages/pages/login/login-withpwd.html": {
+      "window": {
+        "navigationBarTitleText": "账号登录"
+      }
+    },
+    "uni_modules/uni-id-pages/pages/register/register.html": {
+      "window": {
+        "navigationBarTitleText": "账号注册"
+      }
+    },
+    "uni_modules/uni-id-pages/pages/userinfo/change_pwd/change_pwd.html": {
+      "window": {
+        "navigationBarTitleText": "修改密码"
+      }
+    },
+    "uni_modules/uni-id-pages/pages/common/PrivacyPolicy/PrivacyPolicy.html": {
+      "window": {
+        "navigationBarTitleText": "用户服务协议"
+      }
+    },
+    "uni_modules/uni-id-pages/pages/common/UserAgreement/UserAgreement.html": {
+      "window": {
+        "navigationBarTitleText": "隐私政策条款"
+      }
+    },
+    "uni_modules/uni-id-pages/pages/userinfo/deactivate/deactivate.html": {
+      "window": {
+        "navigationBarTitleText": "注销账号"
+      }
+    },
+    "pages/subpack/explanation/explanation.html": {
+      "window": {
+        "navigationBarTitleText": "导入说明",
+        "enablePullDownRefresh": false
+      }
+    },
+    "pages/subpack/analysis/analysis.html": {
+      "window": {
+        "navigationBarTitleText": "数据分析",
+        "enablePullDownRefresh": false
+      }
+    },
+    "pages/subpack/record/record.html": {
+      "window": {
+        "navigationBarTitleText": "出库记录",
+        "enablePullDownRefresh": false
+      }
+    },
+    "pages/subpack/list/list.html": {
+      "window": {
+        "navigationBarTitleText": "商品",
+        "enablePullDownRefresh": true
+      }
+    },
+    "pages/subpack/usermsg/usermsg.html": {
+      "window": {
+        "navigationBarTitleText": "我的消息",
+        "enablePullDownRefresh": false
+      }
+    },
+    "pages/subpack/pay/pay.html": {
+      "window": {
+        "navigationBarTitleText": "支持作者",
+        "enablePullDownRefresh": false
+      }
+    }
+  },
+  "global": {
+    "window": {
+      "navigationBarTextStyle": "black",
+      "navigationBarTitleText": "码上识物铺",
+      "navigationBarBackgroundColor": "#F8F8F8",
+      "backgroundColor": "#F8F8F8"
+    }
+  },
+  "tabBar": {
+    "color": "#9799a5",
+    "selectedColor": "#28B389",
+    "list": [
+      {
+        "text": "首页",
+        "pagePath": "pages/home/home.html",
+        "iconData": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAT1JREFUWEftl6FOxEAQhv+dd0AQJOERCLKd1CA5gUTwHojDwwMgSABDcogz2M1sakgQSDC8Aa/Q7pBeSsMFLuyR9rZia9pkp/98+acz3TWIfJnI+dEBWGunRHQI4GAF1A0zn4YAO+fuVPXkt1hVvSeieZ7nD816ByAi+od4LwBtjk5rASAieXNrnpl5sLJ8y+OYmTsHEkByILoDbSfMvPevRVFMQ3r9PzFlWW5576/run75yjNYy4UCJoBxOCAiFwCOAOwaY+ah9Vs3TlUn7TtPAK6Y+dY45/ZV9XldsR7i35l5b1ECa+2EiHZ6EA2WICKbZdnbOL6BYOwBAsfjgIhsYhRvV1V1pqofS6M4+s8oASQHojvQ7oh6O5g0LQ3geNXc8t6f/9gRbepoBsABuGTmx6Wj2QBTNkgy+ij+BKlg4iE60oPPAAAAAElFTkSuQmCC",
+        "selectedIconData": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAVNJREFUWEdjZBhgwDjA9jPAHaB08nUDAxOTBwMDgzlWRzEyLLhnIpxIjIOVT79b9J/hfywOtcv/MzKsv28ivBokj3DA6bf/8RpOPQeAbIV7BuwAhdOvHZgYmPaD2PdMhWkWLTB7/jMwHrhvKuQID4FRB4yGwICHACg1Kp1+u4rh379r98xFG4jJ6+SoUTn3WfTf399zGf79PQezh2ZZjlgHjjpgcISA8qm3Pf8ZGQMYGP4rMzAyrCc2/khW958hEKTnPwPDcSZGppl3TQQXMiqdemPKwMh4imTDKNbw/849UxFVcBQon3wT+I+JQZpiM0kwgIWJYe9tY5HrgyMNkOBwqisdPCFAj6JY/sxXSeZ/32sY/v9/jVIUD3hlNOqA0RAY8BCAtoio1jEBZ2kGhlCcpda/f40YLSJ6dc1AnRJGJobee8ZCW1C6ZlQvY4k0cMCLYgDyReQhp36qYQAAAABJRU5ErkJggg=="
+      },
+      {
+        "text": "结算",
+        "pagePath": "pages/complate/complate.html",
+        "iconData": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAaxJREFUWEftl7FOwzAQhs/JixRGeAOGkGsGskMfgFfgBWg2NjZmJoZSdpbWUfIICDakbgw8QaQ2hqsSKbHsBNWHIlAjdYnd/747+37HAgzPYrGYep53bRpjeJcKIR7DMLwjLTEAAIVcFUVxEsfxhxGAIUurxHK5PBNCPAPAJSLeGwGklCEXhO/7r0EQfNZ6lbYsyzKJomjaAqjW/gIAjrkAKp0nRCRd6ASQUkoAoOxTRoARAIzqjK0A+gAjAGWtSA8RxR5gpwpkWXYUBMFb37LY5jktAYluNptZWZZzahsbRNc8FgBqzXon6xB1cNscJwAK1hWgL3jV++5dYAr0k+BsAKZKeJ63dU3b0jTs170CtVgza3rXF5ylAg2L7uvEyvCwZeXOm3BwAD3t2s3o0EJE7CsLRwVM3wd0clKpEx0A8b8tQbUH9ERt3w0JewUG3wN7AEsFTr9dUHQd0b9ixX09bxp39oFdgjb/8zcA8jw/XK/X70qp2/F4fOWataECK0Q8aN66yC9aNyMp5RwAzjmDN7S2d0FduwWQpulEKTUBAPpxPS8A8ICINybBL8FR3T+/rHcPAAAAAElFTkSuQmCC",
+        "selectedIconData": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAchJREFUWEftl7FOwzAQhv8LDCwsDd3bChbYqgQkFtqJB4A+AK/AC9BubGzMTAxQdrayVkEsCKY2lImhCuIFEsOVBiWpk6DaUIEaKYoUO/d/d+c7OwTJVekOmzCMI9mY6jsBuiHCpWsVTtkW/TbASI8w8BFsP1vFFymAqpdZ35e63q5h4JqEOOhvrpxJAUrOsKYLYnFh6aFXXR6G9ti2AaODIGi5W8VmDGCc+30AG7oAxnauXNtku8gEKDuvHYKo8ULRBUAkShAohR6nAiQHdAGwnYrjCX66tklzgKkisHrnrfeq5mNeWtLmKaWAjQY+LhAEbS6bNIiseXoAuDTHtZuE+BJPmaMEwGJZAnni2qpAJvQdcW0AskjAMD67ZkpqwlQppyCa85jXPJAjriUCYYvOK8MRD4L6wC7GWrlyBGYOkPQ87Ga8aT3ZhXpeZJQjIDsf8J7OAAJ+Kwnw/1LAayDpZdq5gSOiPQIzXwNzgJQI7Hx0Qcraon+kFefVvGxcuQ9MIxr95m8ArDlvFR9+H8CJa5uHql5PRIAwcC2zHO2q3C/if0aO1wawp1M8tBX+C042tMib8q3XIIEGMLp1XfcgOnetwrHM4Dte4as/8XIhbAAAAABJRU5ErkJggg=="
+      },
+      {
+        "text": "我的",
+        "pagePath": "pages/my/my.html",
+        "iconData": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAqlJREFUWEfFl89vDVEUx79n3l9ghehCl1hJrdqkvWcmFn60QqJbEVJSERI71qwsSJRo+Ae0IdoiITPn9i26UhbCugkS/oje491mhun0zcxrX2XeaubN+fG559e9l9Dwjxr2j20DxHE83Gq1TqnqXgD70gX8IqLfRDQ/Njb2eTuL6hkgSZKpIAguqOpwlQMi+uCcmw/DcLYXkFoA75iIpgAMpQZ/AFgioi/OOf+MIAgGVPUQgNMADqZyq6o6WwdSCSAiDwDc8AaJaNEbZOalqpWJyGkPrKrjqdw7Zj5ZplMKICKaKTnnzkVR9KqXkGYy1trzqvoie2fmrr66/ikibwGc8MrOuYEoin5ux3km2263D6+vr39N3x8y882inS0Aac6fesFWq3VkdHT0206cZzpxHB8IgmCjVlT1SrEmtgB0cvjRFxwRTRpj5vLOkyQZCsNwtQyo3W7vB7CnCB3H8dkgCF4CWO3U0LG8/iaAbPW+4IwxE3nBXDjnmHmyG0SSJDNENA2AmdnmZay1C74wi1HYBGCtfa+qxzuk48VqFxEDQABYb70bgIj4715uC4Dvjk5kF4loxRgzkun/BVheXj7qnPsEYI2ZB4sO+gXw9kTkO4AB59xIFEUrG+2da5u7qnobwCNmvv6fAJ4AuEpE94wxdzYBiMgzAJeI6Jox5nEXAD/hshRcLEnBLQD3AQwy81pRxlo7raozAJ4z8+UigJ9wfpM5E4bhQj+tV6abJMkEEb0G8IaZfU38S4GINA5QmYLdiEhlCqy1lUW4GwAiUl6EdW24SwDlbegdVA2ifgFqB5F3UDWK+wXoaRSn06p0M9opRM+bUT4K/rmR7TiNQnMHkizMjR7JchDNHUoziEaP5fmqb+xiUmy9xq5mO50BdXq1V7M6A/1+/wP1bsUwrhGQVAAAAABJRU5ErkJggg==",
+        "selectedIconData": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAthJREFUWEfNl01rE1EUht8ztT+guS0qFmwmRVBXmpmK7aZduNB+iILdiihVKqLgrq515ULBKhb9A7Yotn6ALtJVxcykLkQX0twGrKC0k64EwXaOzCQTk2kmkzaVcXbJnHPf555577n3EiJ+KGJ9bBogkba6QdTPxDvB2OVOgPCdmH4QaGpBb/mwmUnVDZBIWyNMOAugO0TgLTGmsl1ioh6QUABXGBgBIVkccAlELwB8ZF5fcgtATe3E9n4mGgCjw41jZAiYCAOpCaCa1h0wrhaEaQYKJmQy5ogHPmomPwAbIwAPFoNeS12cCEoIBFANi70ksvl09kjrs3pK6sXETesMMZ54v6UuqmpV/VM1rFcAjjvJO35z+5fu1m+bEfdiO+etA/Y6PhWNeldq4pp/nA0ARbM9dAKVJhxcOCw+b0Xcy9k3t7JnrZkKXmFc9HtiA4CatkzHcEwYXtTEZLl4IrOczCbbMkFAe82fu5uVXy1+6MT7lVOs0FPHmLJLaOX5FQB/Z08zUo8NlQeWlXNS6mK4GoSaXhkH0agNuy+nt82Wx6hGftoxpr8KFQCqYb0BcAwKDfrd3mEs9ypQUgyaXdRjfdUA4kY+ReDeqgDu6uAZAHNSFz0lg5cMY6wesmHPg5CTmoj7BRoFcMZTDesrgHZi9GS7xJzrC08oYeRvMniMwPeyeuuVfwJg5h+A+RKBbmX12I0KANW0HoFxHkSXpRa7vwHg3WqH0mynAMxKTZyr+gnS1nUi3LbXlHjuaEvOH6Oa+VEwj4PwWGriQiWAYTkdrp9hn1zU26YbWXpBuXFjeYigPAfwUupi4D8DCPkE21GRmp8gzITbBBBsws6QZbgtALWWYXGdBjaiRgEK23SNRuQI1GrFDQPU04rdKtTYjLYKUfdmVFmFiLbjoheiO5B4ZY70SFaCiPJQWtolozyWl7s+souJf+lFdjXbag8Iywu9moUN0Oj7P5eGujDlvi6MAAAAAElFTkSuQmCC"
+      }
+    ]
+  },
+  "renderer": {
+    "allUsed": ["webview"],
+    "default": "webview"
+  },
+  "componentFramework": {
+    "allUsed": ["exparser"],
+    "default": "exparser"
+  }
+}
