@@ -1,0 +1,105 @@
+{
+  "pages": [
+    {
+      "path": "pages/home/home",
+      "style": {
+        "navigationBarTitleText": "首页"
+      }
+    },
+    {
+      "path": "pages/home/search",
+      "style": {
+        "navigationBarTitleText": "搜索"
+      }
+    },
+    {
+      "path": "pages/complate/complate",
+      "style": {
+        "navigationBarTitleText": "结算"
+      }
+    },
+    {
+      "path": "pages/my/my",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    },
+    {
+      "path": "pages/subpack/list/list",
+      "style": {
+        "navigationBarTitleText": "商品",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/subpack/analysis/analysis",
+      "style": {
+        "navigationBarTitleText": "数据分析",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/subpack/record/record",
+      "style": {
+        "navigationBarTitleText": "出库记录",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/subpack/explanation/explanation",
+      "style": {
+        "navigationBarTitleText": "导入说明",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/subpack/usermsg/usermsg",
+      "style": {
+        "navigationBarTitleText": "我的消息",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/subpack/pay/pay",
+      "style": {
+        "navigationBarTitleText": "支持作者",
+        "enablePullDownRefresh": false
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "码上识物铺",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#9799a5",
+    "selectedColor": "#28B389",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "static/tabBar/home.png",
+        "selectedIconPath": "static/tabBar/home-active.png"
+      },
+      {
+        "pagePath": "pages/complate/complate",
+        "text": "结算",
+        "iconPath": "static/tabBar/checkout.png",
+        "selectedIconPath": "static/tabBar/checkout-active.png"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "我的",
+        "iconPath": "static/tabBar/my.png",
+        "selectedIconPath": "static/tabBar/my-active.png"
+      }
+    ]
+  },
+  "subPackages": [
+    {
+      "root": "pages/subpack"
+    }
+  ]
+}
