@@ -10,6 +10,28 @@
         <text class="search-text">搜索添加</text>
       </view>
     </view>
+    <view class="manual-input-mask" v-if="showManualInput" @click="closeManualInput">
+      <view class="manual-input-content" @click.stop>
+        <view class="popup-header">
+          <text class="popup-title">手动输入条码</text>
+          <text class="popup-close" @click="closeManualInput">×</text>
+        </view>
+        <view class="popup-body">
+          <input
+            class="form-input"
+            type="text"
+            v-model="manualInputSn"
+            placeholder="请输入商品条码"
+            @confirm="confirmManualInput"
+            focus
+          />
+        </view>
+        <view class="popup-footer">
+          <button class="btn-cancel" @click="closeManualInput">取消</button>
+          <button class="btn-confirm" @click="confirmManualInput">确认</button>
+        </view>
+      </view>
+    </view>
     <view class="goods-section">
       <view class="section-header">
         <text class="section-title">商品清单（{{ totalNum }}件）</text>
@@ -123,7 +145,9 @@ export default {
       tempPrice: '',
       editingIndex: -1,
       pricePopupVisible: false,
-      showSearchPopup: false
+      showSearchPopup: false,
+      showManualInput: false,
+      manualInputSn: ''
     }
   },
   computed: {
@@ -174,9 +198,16 @@ export default {
           self.handleScan(res.result)
         },
         fail: function() {
-          uni.showToast({
-            title: '扫描失败',
-            icon: 'error'
+          uni.showModal({
+            title: '提示',
+            content: '无法调用相机，是否手动输入条码？',
+            confirmText: '手动输入',
+            cancelText: '取消',
+            success: function(res) {
+              if (res.confirm) {
+                self.showManualInput = true
+              }
+            }
           })
           self.scanning = false
         },
@@ -186,6 +217,22 @@ export default {
           }, 500)
         }
       })
+    },
+    closeManualInput: function() {
+      this.showManualInput = false
+      this.manualInputSn = ''
+    },
+    confirmManualInput: function() {
+      var sn = this.manualInputSn.trim()
+      if (!sn) {
+        uni.showToast({
+          title: '请输入条码',
+          icon: 'none'
+        })
+        return
+      }
+      this.handleScan(sn)
+      this.closeManualInput()
     },
     handleScan: function(sn) {
       var self = this
@@ -718,5 +765,24 @@ export default {
 .btn-confirm {
   background: #28B389;
   color: #fff;
+}
+
+.manual-input-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.manual-input-content {
+  width: 600rpx;
+  background: #fff;
+  border-radius: 16rpx;
 }
 </style>

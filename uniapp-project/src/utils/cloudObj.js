@@ -3,6 +3,15 @@ const OUTPUT_HISTORY_KEY = 'local_output_history'
 const USER_KEY = 'local_user_info'
 const MSG_KEY = 'local_msg_list'
 
+function isH5() {
+  try {
+    const sys = uni.getSystemInfoSync()
+    return sys.platform === 'h5'
+  } catch (e) {
+    return true
+  }
+}
+
 function getGoodsList() {
   return uni.getStorageSync(GOODS_KEY) || []
 }
@@ -242,6 +251,147 @@ export const goodsExportImport = {
       item.goods_notes || ''
     ])
     return { code: 200, data }
+  },
+
+  async exportToExcel() {
+    const list = getGoodsList()
+    if (list.length === 0) {
+      return { code: 1, msg: '没有数据可导出' }
+    }
+    try {
+      const XLSX = require('xlsx')
+      const header = ['商品条码', '商品名称', '售价', '成本', '库存数量', '缺货阈值', '备注']
+      const data = list.map(item => [
+        item.goods_sn || '',
+        item.goods_name || '',
+        item.goods_price || 0,
+        item.goods_cost || '',
+        item.goods_num || '',
+        item.goods_threshold || '',
+        item.goods_notes || ''
+      ])
+      data.unshift(header)
+      const ws = XLSX.utils.aoa_to_sheet(data)
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, ws, '商品数据')
+      if (isH5()) {
+        XLSX.writeFile(wb, '商品数据_' + new Date().toLocaleDateString() + '.xlsx')
+        return { code: 200, data: { length: list.length } }
+      } else {
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' })
+        return { code: 200, data: { base64: wbout, length: list.length } }
+      }
+    } catch (e) {
+      return { code: 1, msg: '导出失败: ' + e.message }
+    }
+  },
+
+  async importFromExcel(file) {
+    return new Promise(function(resolve) {
+      try {
+        const XLSX = require('xlsx')
+        const reader = new FileReader()
+        reader.onload = function(e) {
+          try {
+            const data = new Uint8Array(e.target.result)
+            const workbook = XLSX.read(data, { type: 'array' })
+            const sheetName = workbook.SheetNames[0]
+            const worksheet = workbook.Sheets[sheetName]
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+            if (jsonData.length <= 1) {
+              resolve({ code: 1, msg: 'Excel 文件为空或只有表头' })
+              return
+            }
+            const header = jsonData[0]
+            const expectedHeader = ['商品条码', '商品名称', '售价', '成本', '库存数量', '缺货阈值', '备注']
+            const isHeaderMatch = header.slice(0, 7).every(function(h, i) {
+              return h && h.toString().trim() === expectedHeader[i]
+            })
+            const rows = isHeaderMatch ? jsonData.slice(1) : jsonData
+            const filteredRows = rows.filter(function(row) {
+              return row && row.length > 0 && (row[1] || row[0])
+            })
+            if (filteredRows.length === 0) {
+              resolve({ code: 1, msg: '没有有效数据' })
+              return
+            }
+            const list = getGoodsList()
+            let inserted = 0
+            let updated = 0
+            filteredRows.forEach(function(row) {
+              const name = row[1] || ''
+              const price = Number(row[2]) || 0
+              const cost = row[3] !== '' && row[3] != null ? Number(row[3]) : ''
+              const num = row[4] !== '' && row[4] != null ? Number(row[4]) : ''
+              const threshold = row[5] !== '' && row[5] != null ? Number(row[5]) : ''
+              const sn = row[0] || ''
+              const notes = row[6] || ''
+              if (!name.trim()) return
+              const existing = list.find(function(item) {
+                return item.goods_sn === sn && sn
+              })
+              if (existing) {
+                existing.goods_name = name
+                existing.goods_price = price
+                existing.goods_cost = cost
+                existing.goods_num = num
+                existing.goods_threshold = threshold
+                existing.goods_notes = notes
+                existing.last_modify_date = Date.now()
+                updated++
+              } else {
+                list.unshift({
+                  _id: genId(),
+                  user_id: 'local_user',
+                  goods_sn: sn,
+                  goods_name: name,
+                  goods_price: price,
+                  goods_cost: cost,
+                  goods_num: num,
+                  goods_threshold: threshold,
+                  goods_notes: notes,
+                  goods_pic: {},
+                  create_date: Date.now(),
+                  last_modify_date: Date.now()
+                })
+                inserted++
+              }
+            })
+            setGoodsList(list)
+            resolve({ code: 200, inserted, updated })
+          } catch (err) {
+            resolve({ code: 1, msg: '解析 Excel 失败: ' + err.message })
+          }
+        }
+        reader.onerror = function() {
+          resolve({ code: 1, msg: '读取文件失败' })
+        }
+        reader.readAsArrayBuffer(file)
+      } catch (e) {
+        resolve({ code: 1, msg: '导入失败: ' + e.message })
+      }
+    })
+  },
+
+  async downloadTemplate() {
+    try {
+      const XLSX = require('xlsx')
+      const header = ['商品条码', '商品名称', '售价', '成本', '库存数量', '缺货阈值', '备注']
+      const exampleRow = ['6901234567890', '示例商品', 9.9, 5, 100, 10, '这是一个示例商品']
+      const data = [header, exampleRow]
+      const ws = XLSX.utils.aoa_to_sheet(data)
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, ws, '导入模板')
+      if (isH5()) {
+        XLSX.writeFile(wb, '商品导入模板.xlsx')
+        return { code: 200 }
+      } else {
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' })
+        return { code: 200, data: { base64: wbout } }
+      }
+    } catch (e) {
+      return { code: 1, msg: '下载模板失败: ' + e.message }
+    }
   }
 }
 

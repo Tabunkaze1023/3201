@@ -35,6 +35,11 @@
         <text class="menu-text">导入说明</text>
         <text class="menu-arrow">›</text>
       </view>
+      <view class="menu-item" @click="downloadTemplate">
+        <text class="menu-icon">📥</text>
+        <text class="menu-text">下载模板</text>
+        <text class="menu-arrow">›</text>
+      </view>
       <view class="menu-item" @click="checkTip">
         <text class="menu-icon">📥</text>
         <text class="menu-text">导入商品</text>
@@ -44,6 +49,26 @@
         <text class="menu-icon">📤</text>
         <text class="menu-text">导出商品</text>
         <text class="menu-arrow">›</text>
+      </view>
+    </view>
+    <input type="file" accept=".xlsx,.xls" class="file-input" @change="onFileChange" />
+    <view class="import-popup-mask" v-if="showImportPopup" @click="closeImportPopup">
+      <view class="import-popup-content" @click.stop>
+        <view class="popup-header">
+          <text class="popup-title">导入商品</text>
+          <text class="popup-close" @click="closeImportPopup">×</text>
+        </view>
+        <view class="popup-body">
+          <view class="file-select-area" @click="selectFile">
+            <text class="file-icon">📁</text>
+            <text class="file-text">{{ selectedFileName || '点击选择 Excel 文件' }}</text>
+            <text class="file-hint">支持 .xlsx 和 .xls 格式</text>
+          </view>
+        </view>
+        <view class="popup-footer">
+          <button class="btn-cancel" @click="closeImportPopup">取消</button>
+          <button class="btn-confirm" :disabled="!selectedFileName" @click="confirmImport">开始导入</button>
+        </view>
       </view>
     </view>
     <view class="menu-section">
@@ -143,6 +168,9 @@ export default {
       showNicknamePopup: false,
       showFeedbackPopup: false,
       showConfirmPopup: false,
+      showImportPopup: false,
+      selectedFileName: '',
+      selectedFile: null,
       localUserInfo: {}
     }
   },
@@ -238,7 +266,7 @@ export default {
     checkTip: function() {
       var self = this
       if (this.hasShownImportTip) {
-        this.handleImport()
+        this.showImportPopup = true
       } else {
         this.hasShownImportTip = true
         uni.setStorageSync('hasShownImportTip', true)
@@ -251,17 +279,92 @@ export default {
             if (res.confirm) {
               self.goToExplanation()
             } else {
-              self.handleImport()
+              self.showImportPopup = true
             }
           }
         })
       }
     },
-    handleImport: function() {
-      uni.showToast({
-        title: '请在微信小程序中使用导入功能',
-        icon: 'none',
-        duration: 2000
+    downloadTemplate: function() {
+      var self = this
+      uni.showLoading({
+        title: '下载中...'
+      })
+      goodsExportImport.downloadTemplate().then(function(res) {
+        uni.hideLoading()
+        if (res.code === 200) {
+          uni.showToast({
+            title: '模板下载成功',
+            icon: 'success'
+          })
+        } else {
+          uni.showToast({
+            title: res.msg || '下载失败',
+            icon: 'none'
+          })
+        }
+      }).catch(function() {
+        uni.hideLoading()
+        uni.showToast({
+          title: '下载失败',
+          icon: 'error'
+        })
+      })
+    },
+    selectFile: function() {
+      document.querySelector('.file-input').click()
+    },
+    onFileChange: function(event) {
+      var file = event.target.files[0]
+      if (!file) return
+      var ext = file.name.split('.').pop().toLowerCase()
+      if (ext !== 'xlsx' && ext !== 'xls') {
+        uni.showToast({
+          title: '请选择 Excel 文件',
+          icon: 'none'
+        })
+        return
+      }
+      this.selectedFile = file
+      this.selectedFileName = file.name
+    },
+    closeImportPopup: function() {
+      this.showImportPopup = false
+      this.selectedFile = null
+      this.selectedFileName = ''
+      var input = document.querySelector('.file-input')
+      if (input) input.value = ''
+    },
+    confirmImport: function() {
+      var self = this
+      if (!this.selectedFile) return
+      uni.showLoading({
+        title: '导入中...'
+      })
+      goodsExportImport.importFromExcel(this.selectedFile).then(function(res) {
+        uni.hideLoading()
+        if (res.code === 200) {
+          uni.showModal({
+            title: '导入成功',
+            content: '新增 ' + res.inserted + ' 条，更新 ' + res.updated + ' 条',
+            showCancel: false,
+            confirmText: '好的',
+            success: function() {
+              self.closeImportPopup()
+            }
+          })
+        } else {
+          uni.showToast({
+            title: res.msg || '导入失败',
+            icon: 'none'
+          })
+        }
+      }).catch(function() {
+        uni.hideLoading()
+        uni.showToast({
+          title: '导入失败',
+          icon: 'error'
+        })
       })
     },
     handleExport: function() {
@@ -269,7 +372,7 @@ export default {
       uni.showLoading({
         title: '导出中...'
       })
-      goodsExportImport.exportGoods().then(function(res) {
+      goodsExportImport.exportToExcel().then(function(res) {
         uni.hideLoading()
         if (res.code === 200) {
           uni.showModal({
@@ -280,8 +383,8 @@ export default {
           })
         } else {
           uni.showToast({
-            title: '导出失败',
-            icon: 'error'
+            title: res.msg || '导出失败',
+            icon: 'none'
           })
         }
       }).catch(function() {
@@ -392,6 +495,10 @@ export default {
   min-height: 100vh;
   background: #f8f8f8;
   padding-bottom: 40rpx;
+}
+
+.file-input {
+  display: none;
 }
 
 .user-card {
@@ -592,5 +699,50 @@ export default {
 .btn-danger {
   background: #ff6b6b;
   color: #fff;
+}
+
+.import-popup-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.import-popup-content {
+  width: 600rpx;
+  background: #fff;
+  border-radius: 16rpx;
+}
+
+.file-select-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 30rpx;
+  border: 2rpx dashed #ddd;
+  border-radius: 12rpx;
+  background: #fafafa;
+}
+
+.file-icon {
+  font-size: 64rpx;
+  margin-bottom: 20rpx;
+}
+
+.file-text {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.file-hint {
+  font-size: 24rpx;
+  color: #999;
 }
 </style>

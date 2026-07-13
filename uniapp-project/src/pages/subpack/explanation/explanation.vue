@@ -4,10 +4,11 @@
       <view class="section">
         <text class="section-title">📋 导入说明</text>
         <view class="section-content">
-          <text class="text">1. 请先下载导入模板，按照模板格式填写商品信息。</text>
-          <text class="text">2. 支持 .xlsx 格式的 Excel 文件导入。</text>
-          <text class="text">3. 导入时会根据条码自动判断是新增还是更新。</text>
-          <text class="text">4. 商品名称为必填项，其他为选填项。</text>
+          <text class="text">1. 在"我的"页面点击"下载模板"获取导入模板。</text>
+          <text class="text">2. 按照模板格式填写商品信息。</text>
+          <text class="text">3. 支持 .xlsx 和 .xls 格式的 Excel 文件导入。</text>
+          <text class="text">4. 导入时会根据条码自动判断是新增还是更新。</text>
+          <text class="text">5. 商品名称为必填项，其他为选填项。</text>
         </view>
       </view>
       <view class="section">
@@ -67,7 +68,7 @@
       </view>
       <view class="tip-box">
         <text class="tip-title">💡 小提示</text>
-        <text class="tip-text">本地版导入功能需要在微信小程序环境中使用 xlsx 库。您也可以通过手动添加的方式录入商品。</text>
+        <text class="tip-text">本地版支持在 H5 和微信小程序中导入导出 Excel 文件。在"我的"页面可以下载模板、导入商品和导出商品数据。</text>
       </view>
     </scroll-view>
   </view>
