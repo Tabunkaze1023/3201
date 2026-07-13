@@ -4,10 +4,12 @@
   "description": "码上识物铺 - 本地版",
   "type": "module",
   "scripts": {
-    "dev:h5": "uni",
-    "build:h5": "uni build",
-    "dev:mp-weixin": "uni -p mp-weixin",
-    "build:mp-weixin": "uni build -p mp-weixin"
+    "dev:h5": "UNI_INPUT_DIR=. uni",
+    "build:h5": "UNI_INPUT_DIR=. uni build",
+    "dev:mp-weixin": "UNI_INPUT_DIR=. uni -p mp-weixin",
+    "build:mp-weixin": "UNI_INPUT_DIR=. uni build -p mp-weixin",
+    "dev:app": "UNI_INPUT_DIR=. uni -p app",
+    "build:app": "UNI_INPUT_DIR=. uni build -p app"
   },
   "dependencies": {
     "@dcloudio/uni-app": "3.0.0-5010520260709002",
