@@ -61,5 +61,5 @@
       "port" : 8080
     }
   },
-  "vueVersion" : "2"
+  "vueVersion" : "3"
 }

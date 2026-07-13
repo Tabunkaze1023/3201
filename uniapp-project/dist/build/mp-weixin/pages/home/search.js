@@ -1,0 +1,1 @@
+"use strict";const e=require("../../common/vendor.js"),o={components:{searchBox:()=>"../../components/searchBox/searchBox.js"}};if(!Array){e.resolveComponent("search-box")()}const r=e._export_sfc(o,[["render",function(o,r,s,c,n,t){return{a:e.p({BoxHeight:"100vh",flag:0})}}],["__scopeId","data-v-89e2128d"]]);wx.createPage(r);

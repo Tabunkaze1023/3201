@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "结算",
+  "usingComponents": {
+    "search-box": "../../components/searchBox/searchBox",
+    "cart-confirm": "../../components/cart-confirm/cart-confirm"
+  }
+}

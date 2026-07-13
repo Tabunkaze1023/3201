@@ -1,0 +1,50 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/home/search",
+    "pages/complate/complate",
+    "pages/my/my",
+    "pages/subpack/explanation/explanation",
+    "pages/subpack/analysis/analysis",
+    "pages/subpack/record/record",
+    "pages/subpack/list/list",
+    "pages/subpack/usermsg/usermsg",
+    "pages/subpack/pay/pay"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "码上识物铺",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#9799a5",
+    "selectedColor": "#28B389",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "static/tabBar/scan.png",
+        "selectedIconPath": "static/tabBar/scan-active.png"
+      },
+      {
+        "pagePath": "pages/complate/complate",
+        "text": "结算",
+        "iconPath": "static/tabBar/checkout.png",
+        "selectedIconPath": "static/tabBar/checkout-active.png"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "我的",
+        "iconPath": "static/tabBar/my.png",
+        "selectedIconPath": "static/tabBar/my-active.png"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+  "usingComponents": {}
+}

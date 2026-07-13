@@ -1,0 +1,1 @@
+<view class="search-page data-v-89e2128d"><search-box wx:if="{{a}}" class="data-v-89e2128d" u-i="89e2128d-0" bind:__l="__l" u-p="{{a}}"></search-box></view>
