@@ -1,7 +1,25 @@
 <template>
   <view class="complate-page">
-    <view class="scan-section">
-      <view class="scan-btn" @click="handleScanClick">
+    <view class="camera-scan-area" v-if="showCamera">
+      <camera
+        :device-position="'back'"
+        :flash="'off'"
+        :frame-size="'medium'"
+        class="camera-view"
+        @error="onCameraError"
+      ></camera>
+      <view class="scan-frame">
+        <view class="scan-corner top-left"></view>
+        <view class="scan-corner top-right"></view>
+        <view class="scan-corner bottom-left"></view>
+        <view class="scan-corner bottom-right"></view>
+        <view class="scan-line"></view>
+      </view>
+      <view class="scan-tip">将条码放入框内扫描</view>
+      <view class="close-camera" @click="stopCamera">×</view>
+    </view>
+    <view class="scan-section" v-else>
+      <view class="scan-btn" @click="startCameraScan">
         <text class="scan-icon">📷</text>
         <text class="scan-text">{{ scanning ? '扫描中...' : '点击扫码' }}</text>
       </view>
@@ -148,7 +166,9 @@ export default {
       showSearchPopup: false,
       showManualInput: false,
       manualInputSn: '',
-      isFirstShow: true
+      isFirstShow: true,
+      showCamera: false,
+      scanTask: null
     }
   },
   computed: {
@@ -186,15 +206,70 @@ export default {
     if (this.isFirstShow) {
       this.isFirstShow = false
       setTimeout(function() {
-        self.startScan()
+        self.startCameraScan()
       }, 500)
     }
+  },
+  onHide: function() {
+    this.stopCamera()
+  },
+  onUnload: function() {
+    this.stopCamera()
   },
   methods: {
     handleScanClick: function() {
       if (this.scanning) return
       var now = Date.now()
       if (now - this.lastScanTime < 2000) return
+      this.startCameraScan()
+    },
+    startCameraScan: function() {
+      var self = this
+      var sys = uni.getSystemInfoSync()
+      if (sys.platform === 'h5') {
+        this.startScan()
+        return
+      }
+      this.showCamera = true
+      this.scanning = true
+      setTimeout(function() {
+        var ctx = uni.createCameraContext()
+        self.scanTask = ctx.startScan({
+          scanType: ['barCode', 'qrCode'],
+          success: function(res) {
+            var code = String(res.result || '').trim()
+            if (code) {
+              self.handleScan(code)
+            }
+          },
+          fail: function(err) {
+            if (err.errMsg && err.errMsg.indexOf('cancel') !== -1) {
+              self.scanning = false
+              return
+            }
+            uni.showToast({
+              title: '相机扫描失败',
+              icon: 'none'
+            })
+            self.stopCamera()
+          }
+        })
+      }, 500)
+    },
+    stopCamera: function() {
+      this.showCamera = false
+      this.scanning = false
+      if (this.scanTask) {
+        this.scanTask.cancel()
+        this.scanTask = null
+      }
+    },
+    onCameraError: function(err) {
+      uni.showToast({
+        title: '相机开启失败',
+        icon: 'none'
+      })
+      this.stopCamera()
       this.startScan()
     },
     startScan: function() {
@@ -207,8 +282,9 @@ export default {
         onlyFromCamera: true,
         autoDecodeCharset: true,
         success: function(res) {
-          if (res.result) {
-            self.handleScan(res.result)
+          var code = String(res.result || '').trim()
+          if (code) {
+            self.handleScan(code)
           }
         },
         fail: function(err) {
@@ -432,6 +508,106 @@ export default {
   min-height: 100vh;
   background: #f8f8f8;
   padding-bottom: 180rpx;
+}
+
+.camera-scan-area {
+  position: relative;
+  width: 100%;
+  height: 400rpx;
+  background: #000;
+  margin-bottom: 20rpx;
+}
+
+.camera-view {
+  width: 100%;
+  height: 100%;
+}
+
+.scan-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 280rpx;
+  height: 280rpx;
+  border: 2rpx solid rgba(40, 179, 137, 0.5);
+  border-radius: 16rpx;
+}
+
+.scan-corner {
+  position: absolute;
+  width: 32rpx;
+  height: 32rpx;
+  border: 4rpx solid #28B389;
+}
+
+.scan-corner.top-left {
+  top: -4rpx;
+  left: -4rpx;
+  border-right: none;
+  border-bottom: none;
+}
+
+.scan-corner.top-right {
+  top: -4rpx;
+  right: -4rpx;
+  border-left: none;
+  border-bottom: none;
+}
+
+.scan-corner.bottom-left {
+  bottom: -4rpx;
+  left: -4rpx;
+  border-right: none;
+  border-top: none;
+}
+
+.scan-corner.bottom-right {
+  bottom: -4rpx;
+  right: -4rpx;
+  border-left: none;
+  border-top: none;
+}
+
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4rpx;
+  background: linear-gradient(90deg, transparent, #28B389, transparent);
+  animation: scanMove 2s infinite linear;
+}
+
+@keyframes scanMove {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+.scan-tip {
+  position: absolute;
+  bottom: 20rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 24rpx;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+}
+
+.close-camera {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  width: 60rpx;
+  height: 60rpx;
+  line-height: 56rpx;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 40rpx;
+  border-radius: 50%;
 }
 
 .scan-section {

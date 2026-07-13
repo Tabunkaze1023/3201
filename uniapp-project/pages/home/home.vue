@@ -195,8 +195,9 @@ export default {
         onlyFromCamera: true,
         autoDecodeCharset: true,
         success: function(res) {
-          if (res.result) {
-            self.handleScanResult(res.result)
+          var code = String(res.result || '').trim()
+          if (code) {
+            self.handleScanResult(code)
           } else {
             uni.showToast({
               title: '未识别到条码',

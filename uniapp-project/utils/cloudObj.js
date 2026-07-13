@@ -24,24 +24,55 @@ function isApp() {
 function saveFileToApp(base64Data, fileName) {
   return new Promise(function(resolve) {
     try {
-      var fsm = uni.getFileSystemManager()
-      var filePath = uni.env.USER_DATA_PATH + '/' + fileName
-      var buffer = base64ToArrayBuffer(base64Data)
-      fsm.writeFile({
-        filePath: filePath,
-        data: buffer,
-        encoding: 'binary',
-        success: function() {
-          resolve(filePath)
-        },
-        fail: function(err) {
-          resolve(null)
-        }
-      })
+      if (typeof plus !== 'undefined') {
+        plus.io.requestFileSystem(plus.io.PUBLIC_DOWNLOADS, function(fs) {
+          fs.root.getFile(fileName, { create: true, exclusive: false }, function(fileEntry) {
+            fileEntry.createWriter(function(writer) {
+              writer.onwrite = function() {
+                resolve(fileEntry.fullPath)
+              }
+              writer.onerror = function() {
+                fallbackWrite(base64Data, fileName, resolve)
+              }
+              var buffer = base64ToArrayBuffer(base64Data)
+              writer.write(buffer)
+            }, function() {
+              fallbackWrite(base64Data, fileName, resolve)
+            })
+          }, function() {
+            fallbackWrite(base64Data, fileName, resolve)
+          })
+        }, function() {
+          fallbackWrite(base64Data, fileName, resolve)
+        })
+      } else {
+        fallbackWrite(base64Data, fileName, resolve)
+      }
     } catch (e) {
-      resolve(null)
+      fallbackWrite(base64Data, fileName, resolve)
     }
   })
+}
+
+function fallbackWrite(base64Data, fileName, resolve) {
+  try {
+    var fsm = uni.getFileSystemManager()
+    var filePath = uni.env.USER_DATA_PATH + '/' + fileName
+    var buffer = base64ToArrayBuffer(base64Data)
+    fsm.writeFile({
+      filePath: filePath,
+      data: buffer,
+      encoding: 'binary',
+      success: function() {
+        resolve(filePath)
+      },
+      fail: function(err) {
+        resolve(null)
+      }
+    })
+  } catch (e) {
+    resolve(null)
+  }
 }
 
 function base64ToArrayBuffer(base64) {
