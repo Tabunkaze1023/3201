@@ -23,30 +23,24 @@ function isApp() {
 
 function saveFileToApp(base64Data, fileName) {
   return new Promise(function(resolve) {
-    if (typeof plus === 'undefined') {
-      resolve(null)
-      return
-    }
-    plus.io.requestFileSystem(plus.io.PUBLIC_DOWNLOADS, function(fs) {
-      fs.root.getFile(fileName, { create: true }, function(fileEntry) {
-        fileEntry.createWriter(function(writer) {
-          writer.onwrite = function() {
-            resolve(fileEntry.fullPath)
-          }
-          writer.onerror = function() {
-            resolve(null)
-          }
-          var blob = new Blob([base64ToArrayBuffer(base64Data)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
-          writer.write(blob)
-        }, function() {
+    try {
+      var fsm = uni.getFileSystemManager()
+      var filePath = uni.env.USER_DATA_PATH + '/' + fileName
+      var buffer = base64ToArrayBuffer(base64Data)
+      fsm.writeFile({
+        filePath: filePath,
+        data: buffer,
+        encoding: 'binary',
+        success: function() {
+          resolve(filePath)
+        },
+        fail: function(err) {
           resolve(null)
-        })
-      }, function() {
-        resolve(null)
+        }
       })
-    }, function() {
+    } catch (e) {
       resolve(null)
-    })
+    }
   })
 }
 
@@ -62,39 +56,42 @@ function base64ToArrayBuffer(base64) {
 
 function readAppFile(filePath) {
   return new Promise(function(resolve) {
-    if (typeof plus === 'undefined') {
-      resolve(null)
-      return
-    }
-    plus.io.resolveLocalFileSystemURL(filePath, function(entry) {
-      entry.file(function(file) {
-        var reader = new plus.io.FileReader()
-        reader.onloadend = function(e) {
-          resolve(e.target.result)
-        }
-        reader.onerror = function() {
+    try {
+      var fsm = uni.getFileSystemManager()
+      fsm.readFile({
+        filePath: filePath,
+        encoding: 'binary',
+        success: function(res) {
+          var binary = res.data
+          var len = binary.length
+          var bytes = new Uint8Array(len)
+          for (var i = 0; i < len; i++) {
+            bytes[i] = binary.charCodeAt(i)
+          }
+          resolve(bytes.buffer)
+        },
+        fail: function(err) {
           resolve(null)
         }
-        reader.readAsArrayBuffer(file)
-      }, function() {
-        resolve(null)
       })
-    }, function() {
+    } catch (e) {
       resolve(null)
-    })
+    }
   })
 }
 
 function chooseAppFile() {
   return new Promise(function(resolve) {
-    if (typeof plus === 'undefined') {
-      resolve(null)
-      return
-    }
-    plus.io.chooseFile({ multiple: false, filter: 'xlsx,xls' }, function(path) {
-      resolve(path)
-    }, function() {
-      resolve(null)
+    uni.chooseFile({
+      count: 1,
+      type: 'file',
+      success: function(res) {
+        var tempPath = res.tempFiles[0].path
+        resolve(tempPath)
+      },
+      fail: function(err) {
+        resolve(null)
+      }
     })
   })
 }

@@ -147,7 +147,8 @@ export default {
       pricePopupVisible: false,
       showSearchPopup: false,
       showManualInput: false,
-      manualInputSn: ''
+      manualInputSn: '',
+      isFirstShow: true
     }
   },
   computed: {
@@ -180,6 +181,15 @@ export default {
       }, 0) / 100).toFixed(2)
     }
   },
+  onShow: function() {
+    var self = this
+    if (this.isFirstShow) {
+      this.isFirstShow = false
+      setTimeout(function() {
+        self.startScan()
+      }, 500)
+    }
+  },
   methods: {
     handleScanClick: function() {
       if (this.scanning) return
@@ -194,10 +204,18 @@ export default {
       this.lastScanTime = Date.now()
       uni.scanCode({
         scanType: ['barCode', 'qrCode'],
+        onlyFromCamera: true,
+        autoDecodeCharset: true,
         success: function(res) {
-          self.handleScan(res.result)
+          if (res.result) {
+            self.handleScan(res.result)
+          }
         },
-        fail: function() {
+        fail: function(err) {
+          if (err.errMsg && err.errMsg.indexOf('cancel') !== -1) {
+            self.scanning = false
+            return
+          }
           uni.showModal({
             title: '提示',
             content: '无法调用相机，是否手动输入条码？',

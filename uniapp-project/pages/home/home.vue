@@ -192,13 +192,25 @@ export default {
       var self = this
       uni.scanCode({
         scanType: ['barCode', 'qrCode'],
+        onlyFromCamera: true,
+        autoDecodeCharset: true,
         success: function(res) {
-          self.handleScanResult(res.result)
+          if (res.result) {
+            self.handleScanResult(res.result)
+          } else {
+            uni.showToast({
+              title: '未识别到条码',
+              icon: 'none'
+            })
+          }
         },
         fail: function(err) {
+          if (err.errMsg && err.errMsg.indexOf('cancel') !== -1) {
+            return
+          }
           uni.showToast({
-            title: '扫描失败',
-            icon: 'error'
+            title: '扫描失败，请重试',
+            icon: 'none'
           })
         }
       })
